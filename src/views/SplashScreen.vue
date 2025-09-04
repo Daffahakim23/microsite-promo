@@ -19,7 +19,7 @@ import { onMounted, ref } from 'vue';
 import { jwtVerify } from 'jose';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { firebaseApp } from '@/firebase';
-import { useFileStore } from '@/stores/fileStore'; // Import your Pinia store
+import { useFileStore } from '@/stores/filestore'; // Import your Pinia store
 
 export default {
     name: 'FeatureInfoScreen',
