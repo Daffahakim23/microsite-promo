@@ -1,0 +1,7 @@
+{
+  "semi": false,            // Menghilangkan titik koma
+  "singleQuote": true,      // Menggunakan tanda petik tunggal untuk string
+  "tabWidth": 2,            // Lebar indentasi
+  "trailingComma": "es5",   // Menambahkan koma setelah elemen terakhir di array atau objek
+  "vueIndentScriptAndStyle": true  // Menjaga konsistensi indentasi dalam file Vue
+}
