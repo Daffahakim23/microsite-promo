@@ -58,7 +58,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { firebaseApp } from '@/firebase';
 import { getFirestore, doc, collection, addDoc, setDoc, getDocs, Timestamp } from 'firebase/firestore';
-import InputField from '../MicrositePromo/InputField.vue';// <-- 1. Import Pinia store
+import InputField from '../MicrositePromo/InputField.vue';
 import { useFileStore } from "@/stores/filestore";
 
 const geocoder = ref(null);

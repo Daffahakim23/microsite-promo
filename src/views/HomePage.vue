@@ -11,9 +11,9 @@
         <input type="text" placeholder="Cari promo..."
           class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-neutral-300 focus:border-transparent text-sm" />
       </div>
-      <div class="w-4 px-2">
+      <!-- <div class="w-4 px-2">
         <i @click="goBack" class="fas fa-ellipsis-v w-3 text-xl"></i>
-      </div>
+      </div> -->
     </div>
 
     <HeaderNav />

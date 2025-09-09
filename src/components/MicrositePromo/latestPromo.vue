@@ -16,7 +16,7 @@
                         <img :src="promo.imageURL" :alt="promo.title" class="h-20 w-28 object-cover">
                         <div class="py-1">
                             <p class="text-md font-semibold">{{ promo.title }}</p>
-                            <p class="text-xs text-gray-500 mt-1">Berlaku s.d {{ promo.validUntil }}</p>
+                            <p class="text-xs font-medium text-gray-500 mt-1">Berlaku s.d {{ promo.validUntil }}</p>
                         </div>
                     </div>
 

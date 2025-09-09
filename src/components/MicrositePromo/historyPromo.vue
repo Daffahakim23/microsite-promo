@@ -13,10 +13,10 @@
                 <div class="flex items-center justify-between space-x-2">
                     <div class="flex items-center space-x-2">
                         <img :src="promo.imageURL" :alt="promo.title" class="w-24 h-16 object-cover">
-                        <div class="spacey-2">
-                            <p class="text-md font-semibold">{{ promo.title }}</p>
+                        <div class="space-y-2 flex flex-col justify-between h-full">
+                            <p class="text-md font-semibold leading-5">{{ promo.title }}</p>
                             <div class="text-xs text-gray-500">
-                                <p>{{ promo.promoId }}</p>
+                                <!-- <p>{{ promo.promoId }}</p> -->
                                 <p>{{ formatDate(promo.registeredDate) }}</p>
                             </div>
                         </div>
