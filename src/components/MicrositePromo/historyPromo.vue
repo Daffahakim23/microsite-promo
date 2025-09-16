@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-lg mx-auto bg-white space-y-4">
+    <div class="max-w-lg mx-auto bg-white space-y-6">
         <div v-if="loading" class="text-center text-gray-500">
             <p>Memuat riwayat promo...</p>
         </div>
@@ -8,7 +8,7 @@
             <p>Tidak ada riwayat promo yang ditemukan.</p>
         </div>
 
-        <div v-else class="mt-8 space-y-2">
+        <div v-else class="mt-10 space-y-4">
             <div v-for="promo in promos" :key="promo.promoId" class="cursor-pointer" @click="viewPromoDetail(promo)">
                 <div class="flex items-center justify-between space-x-2">
                     <div class="flex items-center space-x-2">
