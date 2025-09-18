@@ -33,39 +33,59 @@
         </div>
     </div>
 </template>
-
 <script>
 import { allPromoData } from '../data/promoData.js';
+import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
 
 export default {
     name: 'DetailPromo',
     props: ['categoryName', 'promoId'],
-    data() {
-        return {
-            promo: null,
+    setup(props) {
+        const promo = ref(null);
+        const router = useRouter();
+
+        // Helper function to format date to YYYY-MM-DD
+        const formatDate = (date) => {
+            if (!date) return null;
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         };
-    },
-    mounted() {
-        this.fetchPromoDetails();
-    },
-    methods: {
-        fetchPromoDetails() {
-            const categoryData = allPromoData[this.categoryName.toLowerCase()];
-            if (categoryData && categoryData[this.promoId]) {
-                // Make sure promoId is treated as a number
-                this.promo = categoryData[parseInt(this.promoId, 10)];
+
+        const fetchPromoDetails = () => {
+            const categoryData = allPromoData[props.categoryName.toLowerCase()];
+            if (categoryData && categoryData[props.promoId]) {
+                const fetchedPromo = { ...categoryData[parseInt(props.promoId, 10)] };
+
+                // Format the validUntil date
+                if (fetchedPromo.validUntil) {
+                    fetchedPromo.validUntil = formatDate(fetchedPromo.validUntil);
+                }
+
+                promo.value = fetchedPromo;
             } else {
-                this.promo = null;
+                promo.value = null;
             }
-        },
-        goBack() {
-            this.$router.push({ name: 'Category', params: { categoryName: this.categoryName } });
+        };
+
+        const goBack = () => {
+            router.push({ name: 'Category', params: { categoryName: props.categoryName } });
             console.log('Kembali ke halaman sebelumnya');
-        },
-    },
-    watch: {
-        '$route.params': 'fetchPromoDetails',
-    },
+        };
+
+        onMounted(fetchPromoDetails);
+
+        watch(() => router.currentRoute.value.params, fetchPromoDetails);
+
+        return {
+            promo,
+            goBack,
+            formatDate
+        };
+    }
 };
 </script>
 

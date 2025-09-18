@@ -248,6 +248,91 @@ export default {
                 this.clearStatusMessageAfterDelay();
             }
         },
+        // async addPromo() {
+        //     // Cek kelengkapan field utama terlebih dahulu
+        //     if (!this.promoData.title || !this.promoData.subtitle || !this.promoData.details || !this.promoData.validUntil || !this.promoData.address) {
+        //         this.statusMessage = "Mohon lengkapi semua field yang diperlukan.";
+        //         this.statusClass = 'toast-error';
+        //         this.clearStatusMessageAfterDelay();
+        //         return;
+        //     }
+
+        //     try {
+        //         const fileStore = useFileStore();
+        //         const merchantIdFromPinia = fileStore.uuid;
+
+        //         if (!merchantIdFromPinia) {
+        //             console.error('Error: merchantId tidak ditemukan di Pinia store.');
+        //             this.statusMessage = 'Error: ID merchant tidak ditemukan. Silakan login ulang.';
+        //             this.statusClass = 'toast-error';
+        //             this.clearStatusMessageAfterDelay();
+        //             return;
+        //         }
+
+        //         let finalImageURL;
+        //         // Jika tidak ada file yang diunggah, gunakan URL placeholder
+        //         if (!this.file) {
+        //             finalImageURL = 'https://operaparallele.org/wp-content/uploads/2023/09/Placeholder_Image.png';
+        //         } else {
+        //             // Jika ada file, unggah ke Cloudinary
+        //             finalImageURL = await this.uploadImageToCloudinary();
+        //             if (!finalImageURL) {
+        //                 return; // Berhenti jika upload gagal
+        //             }
+        //         }
+
+        //         this.promoData.imageURL = finalImageURL;
+        //         this.promoData.merchantId = merchantIdFromPinia;
+
+        //         const db = getFirestore(firebaseApp);
+        //         const categoryDocRef = doc(db, 'categories', this.promoData.category);
+        //         const promosCollectionRef = collection(categoryDocRef, 'promos');
+
+        //         const newPromoRef = doc(promosCollectionRef);
+        //         const newPromoId = newPromoRef.id;
+
+        //         await setDoc(newPromoRef, {
+        //             promoId: newPromoId,
+        //             merchantId: this.promoData.merchantId,
+        //             title: this.promoData.title,
+        //             subtitle: this.promoData.subtitle,
+        //             details: this.promoData.details,
+        //             imageURL: this.promoData.imageURL,
+        //             validUntil: this.promoData.validUntil,
+        //             address: this.promoData.address,
+        //             latitude: this.promoData.latitude,
+        //             longitude: this.promoData.longitude,
+        //             registeredDate: Timestamp.now(),
+        //         });
+
+        //         console.log("Dokumen berhasil ditambahkan dengan ID: ", newPromoId);
+        //         this.statusMessage = 'Promo berhasil ditambahkan!';
+        //         this.statusClass = 'toast-success';
+        //         this.clearStatusMessageAfterDelay();
+
+        //         this.promoData = {
+        //             category: '',
+        //             merchantId: '',
+        //             title: '',
+        //             subtitle: '',
+        //             details: '',
+        //             validUntil: '',
+        //             imageURL: '',
+        //             address: '',
+        //             latitude: null,
+        //             longitude: null,
+        //         };
+        //         this.file = null;
+        //         this.imagePreview = null;
+        //         this.$refs.fileInput.value = '';
+        //     } catch (e) {
+        //         console.error("Error saat menambahkan dokumen: ", e);
+        //         this.statusMessage = 'Error: Gagal menambahkan promo.';
+        //         this.statusClass = 'toast-error';
+        //         this.clearStatusMessageAfterDelay();
+        //     }
+        // },
+
         async addPromo() {
             // Cek kelengkapan field utama terlebih dahulu
             if (!this.promoData.title || !this.promoData.subtitle || !this.promoData.details || !this.promoData.validUntil || !this.promoData.address) {
@@ -291,6 +376,10 @@ export default {
                 const newPromoRef = doc(promosCollectionRef);
                 const newPromoId = newPromoRef.id;
 
+                // **PERUBAHAN DI SINI:** Konversi string validUntil menjadi Timestamp
+                const validUntilDate = new Date(this.promoData.validUntil);
+                const validUntilTimestamp = Timestamp.fromDate(validUntilDate);
+
                 await setDoc(newPromoRef, {
                     promoId: newPromoId,
                     merchantId: this.promoData.merchantId,
@@ -298,7 +387,7 @@ export default {
                     subtitle: this.promoData.subtitle,
                     details: this.promoData.details,
                     imageURL: this.promoData.imageURL,
-                    validUntil: this.promoData.validUntil,
+                    validUntil: validUntilTimestamp, // Gunakan Timestamp yang sudah dikonversi
                     address: this.promoData.address,
                     latitude: this.promoData.latitude,
                     longitude: this.promoData.longitude,
@@ -310,6 +399,7 @@ export default {
                 this.statusClass = 'toast-success';
                 this.clearStatusMessageAfterDelay();
 
+                // Reset data setelah berhasil
                 this.promoData = {
                     category: '',
                     merchantId: '',

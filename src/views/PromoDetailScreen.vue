@@ -24,6 +24,7 @@
                         </p>
                         <p class="promo-validity text-sm text-primary-900 font-medium">
                             {{ formattedValidUntil }}
+                            <!-- {{ promo.validUntil }} -->
                         </p>
                     </div>
                     <p class="text-neutral-700 text-sm">{{ promo.details }}</p>
@@ -89,8 +90,16 @@ export default {
         // Computed property baru untuk memformat tanggal
         const formattedValidUntil = computed(() => {
             if (promo.value && promo.value.validUntil) {
-                const date = new Date(promo.value.validUntil);
-                // Opsi untuk menampilkan nama bulan dalam Bahasa Indonesia
+                let date;
+                // Cek apakah data adalah Timestamp (dari data baru) atau string (dari data lama)
+                if (typeof promo.value.validUntil.toDate === 'function') {
+                    // Jika ini objek Timestamp, gunakan .toDate()
+                    date = promo.value.validUntil.toDate();
+                } else {
+                    // Jika ini string, buat objek Date baru
+                    date = new Date(promo.value.validUntil);
+                }
+
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 // Menggunakan toLocaleDateString() untuk format yang sesuai
                 return date.toLocaleDateString('id-ID', options);

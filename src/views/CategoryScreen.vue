@@ -7,7 +7,7 @@
 
         <div class="scrollable-content">
             <div v-if="loading" class="text-center text-gray-500">
-                <p>Memuat promo untuk kategori {{ categoryName }}...</p>
+                <p>Memuat promo untuk kategori {{ formattedCategoryName }}...</p>
             </div>
 
             <div v-else-if="promos.length === 0" class="text-center text-gray-500">
@@ -15,15 +15,19 @@
             </div>
 
             <div v-else class="main-container">
-                <!-- <h2 class="text-2xl font-bold mb-4 capitalize">Promo Kategori {{ categoryName.replace(/-/g, ' ') }}</h2> -->
                 <div class="grid grid-cols-2 gap-4 scrollable-content">
                     <div v-for="promo in promos" :key="promo.id" class="cursor-pointer"
                         @click="viewPromoDetail(promo.id)">
                         <img :src="promo.imageURL" :alt="promo.title" class="w-full h-28 object-cover mb-2" />
                         <p class="font-bold text-primary-900 text-sm">{{ promo.title }}</p>
-                        <!-- <p class="text-neutral-900 font-semibold text-xl">{{ promo.subtitle }}</p> -->
-                        <!-- <p class="text-gray-500 text-xs mt-2">{{ promo.address }}</p> -->
-                        <p class="text-gray-500 text-xs mt-1 mb-3">Berlaku s.d {{ promo.validUntil }}</p>
+                        <div class="flex gap-1">
+                            <p class="text-gray-500 text-xs mt-1 mb-3">
+                                Berlaku s.d
+                            </p>
+                            <p class="text-gray-700 text-xs mt-1 mb-3">
+                                {{ formatValidUntil(promo.validUntil) }}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32,63 +36,10 @@
     </div>
 </template>
 
-<!-- <script>
-import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
-
-export default {
-    name: 'CategoryPromoScreen',
-    setup() {
-        const route = useRoute();
-        const categoryName = ref(route.params.categoryName);
-        const promos = ref([]);
-        const loading = ref(true);
-
-        const fetchPromosByCategory = async () => {
-            loading.value = true;
-            try {
-                const promosRef = collection(db, 'categories', categoryName.value, 'promos');
-                const querySnapshot = await getDocs(promosRef);
-
-                promos.value = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-
-            } catch (err) {
-                console.error("Gagal mengambil data promo:", err);
-            } finally {
-                loading.value = false;
-            }
-        };
-
-        const goBack = () => {
-            window.history.back();
-        };
-
-        const formattedCategoryName = computed(() => {
-            const name = categoryName.value.replace(/-/g, ' ');
-            return name.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-        });
-
-        onMounted(fetchPromosByCategory);
-
-        return {
-            categoryName,
-            promos,
-            loading,
-            goBack,
-            formattedCategoryName,
-        };
-    }
-};
-</script> -->
 <script>
 import { db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import { ref, onMounted, computed } from 'vue';
+import { collection, getDocs, where, query, Timestamp } from 'firebase/firestore';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
@@ -100,11 +51,25 @@ export default {
         const promos = ref([]);
         const loading = ref(true);
 
+        const formatValidUntil = (timestamp) => {
+            if (!timestamp || typeof timestamp.toDate !== 'function') {
+                return 'Tanggal tidak tersedia';
+            }
+            const date = timestamp.toDate();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('id-ID', options);
+        };
+
         const fetchPromosByCategory = async () => {
             loading.value = true;
             try {
+                const now = Timestamp.now();
                 const promosRef = collection(db, 'categories', categoryName.value, 'promos');
-                const querySnapshot = await getDocs(promosRef);
+
+                // Tambahkan filter untuk promo yang belum expired
+                const q = query(promosRef, where('validUntil', '>=', now));
+
+                const querySnapshot = await getDocs(q);
 
                 promos.value = querySnapshot.docs.map(doc => ({
                     id: doc.id,
@@ -124,8 +89,8 @@ export default {
 
         const viewPromoDetail = (promoId) => {
             router.push({
-                name: 'DetailPromoScreen', // Ganti dengan nama rute untuk screen detail promo
-                params: { promoId: promoId }
+                name: 'DetailPromoScreen',
+                params: { categoryName: categoryName.value, promoId: promoId }
             });
         };
 
@@ -136,6 +101,14 @@ export default {
 
         onMounted(fetchPromosByCategory);
 
+        // Tambahkan watch untuk memuat ulang data jika categoryName di URL berubah
+        watch(() => route.params.categoryName, (newCategory) => {
+            if (newCategory) {
+                categoryName.value = newCategory;
+                fetchPromosByCategory();
+            }
+        });
+
         return {
             categoryName,
             promos,
@@ -143,6 +116,7 @@ export default {
             goBack,
             formattedCategoryName,
             viewPromoDetail,
+            formatValidUntil
         };
     }
 };
