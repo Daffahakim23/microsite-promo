@@ -66,7 +66,6 @@ export default {
                 const now = Timestamp.now();
                 const promosRef = collection(db, 'categories', categoryName.value, 'promos');
 
-                // Tambahkan filter untuk promo yang belum expired
                 const q = query(promosRef, where('validUntil', '>=', now));
 
                 const querySnapshot = await getDocs(q);

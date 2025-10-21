@@ -1,5 +1,5 @@
 {
-  "name": "micrositebpr",
+  "name": "micrositepromo",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,6 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "apexcharts": "^3.45.1",
     "axios": "^1.10.0",
     "country-data": "^0.0.31",

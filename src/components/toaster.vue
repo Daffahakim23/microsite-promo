@@ -1,5 +1,6 @@
 <template>
-    <div v-if="show" :class="toasterClasses" class="fixed top-4 right-4 p-4 rounded-lg shadow-lg flex items-center">
+    <div v-if="show" :class="toasterClasses"
+        class="fixed top-4 right-4 p-4 rounded-lg shadow-lg flex items-center z-[60]">
         <div :class="iconClasses" class="mr-2">
             <i :class="icon"></i>
         </div>

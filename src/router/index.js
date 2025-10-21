@@ -1,12 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
-import ParkingMapsScreen from "../views/ParkingMapsScreen.vue";
 import SplashScreen from "../views/SplashScreen.vue";
-import TransactionHistoryScreen from "../views/TransactionHistoryScreen.vue";
-import PaymentMethodScreen from "../views/PaymentMethodScreen.vue";
-import SettingScreen from "../views/SettingScreen.vue";
-import AccountScreen from "../views/AccountScreen.vue";
-import AddVehicleScreen from "../views/AddVehicleScreen.vue";
 import CategoryScreen from '../views/CategoryScreen.vue';
 import DetailPromoScreen from '../views/PromoDetailScreen.vue';
 import HomePageMerchantScreen from '../views/HomePageMerchantScreen.vue';
@@ -21,32 +15,8 @@ const routes = [
     component: HomePage,
   },
   {
-    path: "/parkingMapsScreen",
-    component: ParkingMapsScreen,
-  },
-  {
     path: "/",
     component: SplashScreen,
-  },
-  {
-    path: "/transactionHistoryScreen",
-    component: TransactionHistoryScreen,
-  },
-  {
-    path: "/paymentMethodScreen",
-    component: PaymentMethodScreen,
-  },
-  {
-    path: "/settingScreen",
-    component: SettingScreen,
-  },
-  {
-    path: "/accountScreen",
-    component: AccountScreen,
-  },
-  {
-    path: "/addVehicleScreen",
-    component: AddVehicleScreen,
   },
   {
     path: '/category/:categoryName',

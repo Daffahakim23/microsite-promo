@@ -1,7 +1,7 @@
 // src/utils/MapOverlay.js
 
-// Import ParkingSignIcon di sini juga agar bisa diakses oleh overlay
-import ParkingSignIcon from '../../assets/icons/parking-sign.svg';
+// Import StoreIcon di sini juga agar bisa diakses oleh overlay
+import StoreIcon from '../../assets/icons/icon_store.svg';
 
 export function createParkingOverlayClass() {
     class ParkingOverlay extends window.google.maps.OverlayView {
@@ -40,8 +40,8 @@ export function createParkingOverlayClass() {
 
             // Tambahkan SVG icon dan teks spot
             this.div.innerHTML = `
-                <img src="${ParkingSignIcon}" style="height: 20px; width: 20px;">
-                <span style="font-size: 16px; font-weight: bold;">${this.location.spots}</span>
+                <img src="${StoreIcon}" style="height: 20px; width: 20px;">
+                <span style="font-size: 16px; font-weight: bold;">${this.location.name}</span>
             `;
 
             // Tambahkan event listener untuk klik

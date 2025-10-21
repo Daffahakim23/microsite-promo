@@ -80,7 +80,6 @@ export default {
             if (typeof validUntilData.toDate === 'function') {
                 date = validUntilData.toDate();
             }
-            // Jika bukan Timestamp, coba proses sebagai string atau tipe data lain
             else {
                 date = new Date(validUntilData);
             }

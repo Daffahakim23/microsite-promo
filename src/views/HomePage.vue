@@ -17,14 +17,20 @@
     </div>
 
     <HeaderNav />
+    <div class="h-2"></div>
 
     <ActiveParkingCard />
+    <div class="h-2"></div>
 
     <HorizontalListWithData />
+    <div class="h-2"></div>
+
+    <CompactParkingMap />
+    <div class="h-2"></div>
 
     <LatestPromos />
+    <div class="h-2"></div>
 
-    <RegisteredVehiclesSection :vehicles="registeredVehiclesData" />
     <div class="h-8"></div>
   </div>
 </template>
@@ -38,9 +44,11 @@ import ActiveParkingCard from '../components/HomePage/ActiveParkingCard.vue';
 import HorizontalListWithData from '../components/MicrositePromo/ListCard2.vue';
 import LatestPromos from '../components/MicrositePromo/latestPromo.vue';
 import HeaderNav from '../components/MicrositePromo/headerCategory.vue';
+import CompactParkingMap from '../components/MicrositePromo/mapsMerchant.vue';
 export default {
   name: 'SmartParkingSolution',
   components: {
+    CompactParkingMap,
     HeaderSection,
     ProfileCard,
     MenuIcons,

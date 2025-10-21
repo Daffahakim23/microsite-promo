@@ -1,24 +1,3 @@
-// import { createApp } from "vue";
-// import App from "./App.vue";
-// import router from "./router";
-// import "./assets/tailwind.css";
-// import VueApexCharts from "vue3-apexcharts";
-// import { createPinia } from 'pinia';
-// import 'flowbite';
-// /* src/assets/main.css */
-// import "flag-icons/css/flag-icons.css";
-
-
-// const app = createApp(App);
-// const pinia = createPinia();
-
-// app.use(pinia);
-
-// app.use(router);
-
-// app.use(VueApexCharts);
-
-// app.mount("#app");
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router"; // Pastikan ini mengimpor router yang sudah Anda definisikan
@@ -30,6 +9,11 @@ import 'flowbite';
 import "flag-icons/css/flag-icons.css";
 import { firebaseApp } from './firebase';
 import { VueFire } from 'vuefire';
+// 1. Import komponen utama Font Awesome Vue
+// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+// // 2. Import core library
+// import { library } from '@fortawesome/fontawesome-svg-core';
 
 
 const app = createApp(App);
@@ -41,15 +25,15 @@ app.use(VueFire, {
     // Opsi lain seperti modules atau plugins
 });
 
+// --- LOGIKA DETEKSI RELOAD INI DIHAPUS ---
+/*
 const navigationEntry = performance.getEntriesByType("navigation")[0];
 
-// Periksa apakah jenis navigasi adalah "reload"
 if (navigationEntry && navigationEntry.type === "reload") {
     console.log('Aplikasi terdeteksi dimuat ulang (refresh). Mengarahkan ke halaman utama (/).');
-    // Ini adalah reload, arahkan ke halaman utama (/) setelah router siap
+    // Blok ini yang menyebabkan pengarahan paksa ke rute "/"
     router.isReady().then(() => {
         router.push({ path: "/" }).catch(err => {
-            // Tangani error jika push gagal, misalnya navigasi ke rute yang sama
             if (err.name !== 'NavigationDuplicated') {
                 console.error('Gagal mengarahkan router setelah reload:', err);
             }
@@ -59,17 +43,14 @@ if (navigationEntry && navigationEntry.type === "reload") {
     });
 } else {
     console.log('Aplikasi dimuat pertama kali atau navigasi normal. Memuat rute yang diminta.');
-    // Ini adalah kunjungan pertama atau navigasi normal, biarkan router memuat rute yang diminta.
 }
+*/
+// --- LOGIKA DETEKSI RELOAD DIHAPUS ---
 
-// Tidak perlu lagi event listener 'beforeunload' untuk sessionStorage
-// karena kita tidak lagi menggunakan sessionStorage untuk logika reload ini.
+app.use(router); // Router dipasang, dan akan memuat rute berdasarkan URL saat ini.
 
-// --- Logika Deteksi Reload yang Akurat Berakhir ---
-
-app.use(router); // Router harus dipasang.
+// app.component('font-awesome-icon', FontAwesomeIcon);
 
 app.use(VueApexCharts);
 
 app.mount("#app");
-

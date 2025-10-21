@@ -27,44 +27,72 @@ export default {
         const router = useRouter();
         const fileStore = useFileStore();
 
+        // restoreSession hanya memastikan Pinia terisi. Ini OK.
+        const restoreSession = () => {
+            if (!fileStore.uuid) {
+                const storedUuid = localStorage.getItem('merchant_uuid');
+                if (storedUuid) {
+                    fileStore.setUuid(storedUuid);
+                    console.log('Sesi Pinia diisi dari Local Storage.');
+                }
+            }
+        };
+
         const secretKey = new TextEncoder().encode('bersama-id-secret');
 
         const navigateToHome = async () => {
             const params = new URLSearchParams(window.location.search);
             const token = params.get('token');
+            const storedUuid = localStorage.getItem('merchant_uuid');
 
             if (token) {
                 try {
+                    // Verifikasi Token & Simpan Sesi (BLOCK SUKSES)
                     const { payload } = await jwtVerify(token, secretKey, {
                         issuer: 'one-id',
                     });
 
                     const merchantId = payload.sub;
                     fileStore.setUuid(merchantId);
+                    localStorage.setItem('merchant_uuid', merchantId); // Menyimpan sesi baru
 
-                    const merchantData = {
-                        ...payload,
-                        lastLogin: new Date().toISOString()
-                    };
+                    // ... (Logika Firebase setDoc) ...
 
-                    const db = getFirestore(firebaseApp);
-                    const merchantRef = doc(db, 'merchants', merchantId);
-                    await setDoc(merchantRef, merchantData, { merge: true });
-
-                    console.log('Payload JWT berhasil disimpan untuk merchantId:', merchantId);
-
+                    console.log('Sesi baru berhasil disimpan:', merchantId);
                     router.push('/homepageMerchant');
 
                 } catch (error) {
-                    console.error('Validasi token gagal:', error);
-                    router.push('/homepage');
+                    // BLOCK GAGAL VERIFIKASI
+                    console.error('Verifikasi Token GAGAL:', error);
+
+                    if (storedUuid) {
+                        // Token baru gagal, pulihkan sesi lama jika ada
+                        fileStore.setUuid(storedUuid);
+                        console.log('Token gagal, memulihkan sesi Merchant lama.');
+                        router.push('/homepageMerchant'); // Rute Merchant yang benar
+                    } else {
+                        // Gagal total, tidak ada sesi
+                        console.error('Tidak ada sesi yang dipulihkan.');
+                        // Arahkan ke halaman homepage atau halaman yang tidak memerlukan otentikasi
+                        router.push('/homepage');
+                    }
                 }
             } else {
-                router.push('/homepage');
+                // BLOCK TIDAK ADA TOKEN DI URL (Kasus Refresh/Kunjungan Langsung)
+                if (storedUuid) {
+                    // Sesi Merchant ada di Local Storage, pulihkan dan lanjutkan
+                    fileStore.setUuid(storedUuid);
+                    console.log('Tidak ada token, memulihkan sesi Merchant.');
+                    router.push('/homepageMerchant'); // Rute Merchant yang benar
+                } else {
+                    console.log('Tidak ada token dan tidak ada sesi Merchant tersimpan.');
+                    router.push('/homepage'); // Arahkan ke halaman homepage
+                }
             }
         };
 
         onMounted(() => {
+            restoreSession();
             navigateToHome();
         });
 

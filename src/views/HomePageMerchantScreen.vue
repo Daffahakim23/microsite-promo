@@ -14,10 +14,16 @@
         </div>
 
         <HeaderNav />
+        <div class="h-2"></div>
 
         <ActiveParkingCard />
+        <div class="h-2"></div>
 
         <HorizontalListWithData />
+        <div class="h-2"></div>
+
+        <CompactParkingMap />
+        <div class="h-2"></div>
 
         <LatestPromos />
         <div class="h-8"></div>
@@ -34,11 +40,13 @@ import HorizontalListWithData from '../components/MicrositePromo/ListCard2.vue';
 import PromoInputForm from '../components/MicrositePromo/PromoInputForm.vue';
 import BottomNavbar from '../components/MicrositePromo/BottomNavBar.vue';
 import LatestPromos from '../components/MicrositePromo/latestPromo.vue';
+import CompactParkingMap from '../components/MicrositePromo/mapsMerchant.vue';
 
 import HeaderNav from '../components/MicrositePromo/headerCategory.vue';
 export default {
     name: 'SmartParkingSolution',
     components: {
+        CompactParkingMap,
         HeaderSection,
         ProfileCard,
         MenuIcons,
